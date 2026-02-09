@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>九星気学・裏数秘術の自動診断｜本命星・影の性格を無料でチェック</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="生年月日から九星気学と裏数秘術を自動診断します。本命星や隠れた性格、運勢の傾向を鑑定士風に解説。無料で結果を確認し、noteでさらに詳しい鑑定コラムもチェック">
+<style>
+body {
+  margin:0; padding:0;
+  font-family: "ヒラギノ角ゴシック","Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  color: #000; text-align: center;
+  background-color: #f5f0e6;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.01), rgba(0,0,0,0.01) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.01), rgba(0,0,0,0.01) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: multiply;
+}
+body::before {
+  content: "";
+  position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(245,240,230,0.2), transparent 70%),
+    radial-gradient(circle at 80% 70%, rgba(230,225,245,0.15), transparent 70%);
+}
+h1 { font-size:2.5em; margin-top:50px; text-shadow:1px 1px 2px rgba(0,0,0,0.1);}
+h2 { font-size:1.8em; margin:30px 0 5px; }
+p { margin:8px 0; }
+
+/* 結果表示 */
+#kyusei, #numerology { font-size: 1.3em; font-weight: bold; margin-top: 15px; }
+#kyusei-comment, #numerology-comment { 
+  font-size: 1.1em; color: #333; margin-top: 5px; font-style: italic; 
+}
+
+.result-container { margin-top:20px; padding:0 20px; }
+
+/* note誘導ボタン */
+.note-cta {
+  display:inline-block; margin:30px auto; padding:15px 25px;
+  background-color:#b19cd9; color:black; border-radius:8px; text-decoration:none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.3s ease;
+  text-align:center; line-height:1.4;
+}
+.note-cta span { display:block; }
+.note-cta:hover { background-color:#9a80c4; }
+
+/* 診断ボタン */
+.back-btn {
+  display:inline-block; margin:40px auto; padding:12px 20px;
+  background-color:#b19cd9; color:black; border-radius:8px; text-decoration:none;
+  box-shadow:0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.3s ease;
+}
+.back-btn:hover { background-color:#9a80c4; }
+
+/* 広告枠 */
+.ad-container {
+  margin: 30px auto; width:300px; height:250px; background:#ddd; line-height:250px;
+  color:#555; border-radius:8px; text-align:center;
+}
+
+/* 解説文章 */
+#explanation { max-width:700px; margin:40px auto 0; text-align:left; font-size:1em; line-height:1.6; color:#333; padding:0 20px; }
+#explanation h3 { font-size:1.2em; margin-top:20px; }
+</style>
+</head>
+<body>
+
+<h1>診断結果</h1>
+
+<div class="result-container" id="results">
+  <h2>あなたの九星気学・裏数秘術</h2>
+  <p id="birthday-display">生年月日: ---</p>
+  <p id="kyusei">九星気学: ---</p>
+  <p id="kyusei-comment">---</p>
+  <p id="numerology">裏数秘術: ---</p>
+  <p id="numerology-comment">---</p>
+</div>
+
+<!-- note誘導ボタン -->
+<a href="https://note.com/clean_serval455" target="_blank" class="note-cta">
+  <span>澪｜決断迷子のための鑑定師</span>
+  <span>九星 × 裏数秘 × タロット</span>
+  <span>noteで鑑定コラム連載中</span>
+</a>
+
+<!-- 広告枠 -->
+<div class="ad-container">広告スペース</div>
+
+<!-- 解説文章 -->
+<div id="explanation">
+  <h3>九星気学とは？</h3>
+  <p>九星気学は、4000年以上の歴史を持つ中国古代の陰陽五行説を基にした占術です。生年月日や方位を9つの本命星に分類し、性格や相性、運勢、方位の吉凶を読み解きます。方位による運勢判断にも広く用いられています</p>
+  <h3>裏数秘術とは？</h3>
+  <p>裏数秘術は、生年月日などから計算される主要な数字とは別に、深層心理や隠れた才能、前世からの使命など、本人の内側に秘められた意外な一面を読み解く占術です。数秘術の応用編として、自分でも気づかない真の性格や人生の課題を知るために用いられます</p>
+</div>
+
+<!-- もう一度診断ボタン -->
+<a href="index.html" class="back-btn">もう一度診断する</a>
+
+<script>
+// クエリパラメータ取得
+function getQueryParam(param) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(param);
+}
+
+// 裏数秘術マスターナンバー対応＋鑑定士風コメント
+function calculateNumerology(sum) {
+  while(sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = sum.toString().split('').map(Number).reduce((a,b)=>a+b,0);
+  }
+  return sum;
+}
+
+// 九星気学（本命星）計算
+function getKyusei(birthday) {
+  let year = parseInt(birthday.slice(0,4));
+  const month = parseInt(birthday.slice(5,7));
+  const day = parseInt(birthday.slice(8,10));
+
+  // 節分前は前年扱い
+  if(month === 1 || (month === 2 && day < 4)) year -= 1;
+
+  // 西暦を分解して足す
+  let sum = year.toString().split('').map(Number).reduce((a,b)=>a+b,0);
+  while(sum > 9) sum = sum.toString().split('').map(Number).reduce((a,b)=>a+b,0);
+
+  // 11から引く
+  let kyuseiNum = 11 - sum;
+  if(kyuseiNum > 9) kyuseiNum = kyuseiNum.toString().split('').map(Number).reduce((a,b)=>a+b,0);
+
+  const kyuseiNames = ["一白水星","二黒土星","三碧木星","四緑木星","五黄土星","六白金星","七赤金星","八白土星","九紫火星"];
+  return kyuseiNames[kyuseiNum-1];
+}
+
+// 九星コメント
+const kyuseiComment = {
+  "一白水星":"柔軟性に富み、静かに物事を見極める知恵の持ち主",
+  "二黒土星":"真面目で誠実、努力を惜しまぬ堅実な星",
+  "三碧木星":"好奇心旺盛で行動力に富む、若々しい発信者",
+  "四緑木星":"協調性と誠実さを兼ね備えた社交家",
+  "五黄土星":"強運とリーダーシップを持つ星",
+  "六白金星":"負けず嫌いで完璧主義の星",
+  "七赤金星":"社交的で会話上手、周囲を楽しませる星",
+  "八白土星":"意志が固く忍耐強い、改革を好む努力家",
+  "九紫火星":"知性と情熱を兼ね備え、美や流行に敏感な星"
+};
+
+// 裏数秘術コメント（鑑定士風）
+const numerologyComment = {
+  1:"表には出さない強い自我を秘めた統率者",
+  2:"内に秘めた計算と繊細さを持つ調整者",
+  3:"無邪気に見せつつも、影では軽やかに逃げる表現者",
+  4:"守りを固める堅実さの裏に、柔軟性の欠如を潜ませる者",
+  5:"自由を愛する反面、飽きやすく逃避的な探求者",
+  6:"深い愛情を持つが、時に束縛的になる保護者",
+  7:"洞察力に優れる孤高の思索者、時に他者を遠ざける",
+  8:"行動力の裏に潜む権力志向、目的達成に固執する実践者",
+  9:"表面は冷静だが、影では批判的に世界を見つめる観察者",
+  11:"直感鋭く創造的だが、感受性の波に翻弄される予見者",
+  22:"壮大な理想を追う力の裏に、既存を破壊する潜在力を持つ建築者",
+  33:"愛と調和の力を持つが、理解されにくい孤高のカリスマ"
+};
+
+// メイン処理
+const birthday = getQueryParam('birthday'); // yyyy-mm-dd
+if(birthday){
+  const nums = birthday.replace(/-/g,'').split('').map(n=>parseInt(n));
+  const sum = nums.reduce((a,b)=>a+b,0);
+
+  // 生年月日表示
+  const yyyy = birthday.slice(0,4);
+  const mm = parseInt(birthday.slice(5,7));
+  const dd = parseInt(birthday.slice(8,10));
+  document.getElementById('birthday-display').textContent = `生年月日: ${yyyy}年${mm}月${dd}日`;
+
+  // 九星気学
+  const kyuseiStr = getKyusei(birthday);
+  document.getElementById('kyusei').textContent = "九星気学: " + kyuseiStr;
+  document.getElementById('kyusei-comment').textContent = kyuseiComment[kyuseiStr];
+
+  // 裏数秘術
+  const numerologyNum = calculateNumerology(sum);
+  document.getElementById('numerology').textContent = "裏数秘術: " + numerologyNum;
+  document.getElementById('numerology-comment').textContent = numerologyComment[numerologyNum];
+}
+</script>
+
+</body>
+</html>

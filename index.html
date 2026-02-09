@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>九星気学・裏数秘術 無料自動診断｜本命星と隠れた性格を鑑定</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="生年月日を入力するだけで、九星気学と裏数秘術の本命星や隠れた性格を鑑定師風に自動診断できます。自己理解や運勢のヒントを手軽に知り、さらに詳しい鑑定コラムはnoteで連載中">
+<style>
+body {
+  margin:0; padding:0;
+  font-family: "ヒラギノ角ゴシック","Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  color: #000; text-align: center;
+  background-color: #f5f0e6;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.01), rgba(0,0,0,0.01) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.01), rgba(0,0,0,0.01) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: multiply;
+}
+body::before {
+  content: "";
+  position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(245,240,230,0.2), transparent 70%),
+    radial-gradient(circle at 80% 70%, rgba(230,225,245,0.15), transparent 70%);
+}
+h1 { font-size:2.5em; margin-top:50px; text-shadow:1px 1px 2px rgba(0,0,0,0.1);}
+p { font-size:1.1em; margin:15px 0; }
+input[type="text"] {
+  padding:10px; font-size:1.2em; border-radius:5px; border:1px solid #ccc; text-align:center;
+}
+button {
+  margin-top:25px;   /* 上の余白 */
+  margin-bottom:50px; /* 下に余裕を追加 */
+  padding:12px 20px;
+  font-size:1.2em;
+  background:#b19cd9;
+  color:black;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  box-shadow:0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.3s ease;
+}
+button:hover { background:#9a80c4; }
+
+/* 解説文章 */
+#explanation { 
+  max-width:700px; 
+  margin:30px auto; 
+  text-align:center; 
+  font-size:0.95em; 
+  line-height:1.5; 
+  color:#333; 
+  padding:0 20px; 
+}
+#explanation h2 { 
+  font-size:1.3em; 
+  margin-top:20px; 
+}
+#explanation a { 
+  color:#5a2fa5; 
+  text-decoration:underline; 
+}
+</style>
+</head>
+<body>
+
+<h1>九星気学・裏数秘術 無料自動診断</h1>
+
+<p>生年月日を8桁で入力してください（例: 19880919）</p>
+
+<input type="text" id="birthday" maxlength="8" placeholder="19880919" inputmode="numeric" />
+
+<br>
+<button onclick="goResult()">診断する</button>
+
+<div id="explanation">
+  <h2>鑑定師からのご案内</h2>
+  <p>生年月日を入力することで、あなたの九星気学の本命星と裏数秘術ナンバーを算出し、性格や隠れた才能を鑑定師が解説いたします</p>
+  <p>診断結果では、日常に潜む無意識のエネルギーや強み・課題を丁寧に読み解きます</p>
+  <p>この結果を通して、自己理解を深め、今後の行動や運勢のヒントを得ることが可能です</p>
+  <p>さらに深い解説や鑑定コラムは、<a href="https://note.com/clean_serval455" target="_blank" rel="noopener">noteで連載中</a>です</p>
+</div>
+
+<script>
+function goResult() {
+  const input = document.getElementById("birthday").value.trim();
+  if(!/^\d{8}$/.test(input)) {
+    alert("誕生日は8桁の数字で入力してください（例: 19880919）");
+    return;
+  }
+  const formatted = input.slice(0,4) + "-" + input.slice(4,6) + "-" + input.slice(6,8);
+  location.href = "result.html?birthday=" + formatted;
+}
+
+// エンターでも診断可能
+document.getElementById("birthday").addEventListener("keypress", function(e){
+  if(e.key === "Enter") goResult();
+});
+</script>
+
+</body>
+</html>
